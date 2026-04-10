@@ -1,5 +1,15 @@
 const { leerDatos, guardarDatos } = require("../config/db");
 const Departamento = require("../models/departamento");
+ 
+exports.obtenerDepartamentos = (req, res) => {
+    try {
+        const db = leerDatos();
+        res.json(db.departamentos);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error al obtener los departamentos" });
+    }
+};
 
 exports.agregarDepartamento = (req, res) => {
     try {
@@ -21,12 +31,37 @@ exports.agregarDepartamento = (req, res) => {
     }
 };
 
-exports.obtenerDepartamentos = (req, res) => {
+exports.ActualizarDepartamento = (req, res) => {
     try {
+        const { id } = req.params;
+        const { nombre } = req.body;
         const db = leerDatos();
-        res.json(db.departamentos);
+        const index = db.departamentos.findIndex(d => d.id === parseInt(id));
+        if (index === -1) {
+            return res.status(404).json({ message: "Departamento no encontrado" });
+        }
+        db.departamentos[index].nombre = nombre;
+        guardarDatos(db);
+        res.json({ message: "Departamento actualizado con éxito", departamento: db.departamentos[index] });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Error al obtener los departamentos" });
+        res.status(500).json({ message: "Error al actualizar el departamento" });
+    }
+};
+
+exports.EliminarDepartamento = (req, res) => {
+    try {
+        const { id } = req.params;
+        const db = leerDatos();
+        const index = db.departamentos.findIndex(d => d.id === parseInt(id));
+        if (index === -1) {
+            return res.status(404).json({ message: "Departamento no encontrado" });
+        }
+        db.departamentos.splice(index, 1);
+        guardarDatos(db);
+        res.json({ message: "Departamento eliminado con éxito" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error al eliminar el departamento" });
     }
 };

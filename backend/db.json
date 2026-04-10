@@ -1,7 +1,27 @@
 {
   "empresa": {
-    "nombre": "Dev Costa Rica"
+    "nombre": "Dev Costa Rica",
+    "direccion": "Heredia, Costa Rica",
+    "telefono": "2222-3333"
   },
-  "departamentos": [],
-  "empleados": []
+  "departamentos": [
+    {
+      "id": 2,
+      "nombre": "Ventas",
+      "empleados": []
+    },
+    {
+      "id": 3,
+      "nombre": "Marketing",
+      "empleados": []
+    }
+  ],
+  "empleados": [
+    {
+      "id": 1,
+      "nombre": "Juan Perez",
+      "puesto": "Contador",
+      "departamentoId": 1
+    }
+  ]
 }

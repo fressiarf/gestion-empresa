@@ -1,8 +1,9 @@
 class Empresa {
-    constructor(nombre) {
+    constructor(nombre, direccion, telefono) {
         this.nombre = nombre;
-        this.departamentos = JSON.parse(localStorage.getItem("departamentos")) || [];
+        this.direccion = direccion;
+        this.telefono = telefono;
     }
-
 }
-module.exports = Empresa;
+
+module.exports = Empresa;
