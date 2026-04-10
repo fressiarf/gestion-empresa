@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const empresaController = require("../controllers/departamentoControllers");
+const departamentoController = require("../controllers/departamentoControllers");
 
-router.get("/", empresaController.obtenerTodoslosDepartamentos);
-router.post("/", empresaController.CrearDepartamento);
-router.put("/:id", empresaController.ActualizarDepartamento);
-router.delete("/:id", empresaController.EliminarDepartamento);
+router.get("/", departamentoController.obtenerDepartamentos);
+router.post("/", departamentoController.agregarDepartamento);
+// router.put("/:id", departamentoController.ActualizarDepartamento);
+// router.delete("/:id", departamentoController.EliminarDepartamento);
 
 module.exports = router;

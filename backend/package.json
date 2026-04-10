@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/fressiarf/gestion-empresa/issues"
   },
-  "homepage": "https://github.com/fressiarf/gestion-empresa#readme"
+  "homepage": "https://github.com/fressiarf/gestion-empresa#readme",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
 }
