@@ -42,13 +42,8 @@ exports.actualizarEmpresa = (req, res) => {
 
 exports.eliminarEmpresa = (req, res) => {
     try {
-        const { id } = req.params;
         const db = leerDatos();
-        const index = db.empresa.findIndex(e => e.id === parseInt(id));
-        if (index === -1) {
-            return res.status(404).json({ message: "Empresa no encontrada" });
-        }
-        db.empresa.splice(index, 1);
+        db.empresa = {};
         guardarDatos(db);
         res.json({ message: "Empresa eliminada con éxito" });
     } catch (err) {
