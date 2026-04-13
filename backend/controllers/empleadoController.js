@@ -11,9 +11,24 @@ exports.obtenerEmpleados = (req, res) => {
     }
 };
 
+exports.obtenerEmpleadoPorId = (req, res) => {
+    try {
+        const { id } = req.params;
+        const db = leerDatos();
+        const empleado = db.empleados.find(e => e.id === parseInt(id));
+        if (!empleado) {
+            return res.status(404).json({ message: "Empleado no encontrado" });
+        }
+        res.json(empleado);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error al obtener el empleado" });
+    }
+};
+
 exports.agregarEmpleado = (req, res) => {
     try {
-        const { nombre, puesto, departamentoId } = req.body;
+        const { nombre, puesto, departamentoId, empresaId } = req.body;
         const db = leerDatos();
         
         const indexDepto = db.departamentos.findIndex(d => d.id === parseInt(departamentoId));
@@ -27,13 +42,18 @@ exports.agregarEmpleado = (req, res) => {
             id: nuevoId,
             nombre: nuevoEmpleado.nombre,
             puesto: nuevoEmpleado.puesto,
-            departamentoId: parseInt(departamentoId)
+            departamentoId: parseInt(departamentoId),
+            empresaId: empresaId || null
         };
         db.empleados.push(empleadoParaGuardar);
         
-        if (!db.empresa) db.empresa = {};
-        if (!db.empresa.empleados) db.empresa.empleados = [];
-        db.empresa.empleados.push(nuevoId);
+        if (empresaId && db.empresas) {
+            const empresa = db.empresas.find(e => e.id === empresaId);
+            if (empresa) {
+                if (!empresa.empleados) empresa.empleados = [];
+                empresa.empleados.push(nuevoId);
+            }
+        }
         
         if (!db.departamentos[indexDepto].empleados) db.departamentos[indexDepto].empleados = [];
         db.departamentos[indexDepto].empleados.push(nuevoId);
@@ -49,7 +69,7 @@ exports.agregarEmpleado = (req, res) => {
 exports.ActualizarEmpleado = (req, res) => {
     try {
         const { id } = req.params;
-        const { nombre, puesto, departamentoId } = req.body;
+        const { nombre, puesto, departamentoId, empresaId } = req.body;
         const db = leerDatos();
         const index = db.empleados.findIndex(d => d.id === parseInt(id));
         if (index === -1) {
@@ -58,6 +78,7 @@ exports.ActualizarEmpleado = (req, res) => {
         
         const empleadoId = parseInt(id);
         const oldDeptoId = db.empleados[index].departamentoId;
+        const oldEmpresaId = db.empleados[index].empresaId;
 
         if (nombre) db.empleados[index].nombre = nombre;
         if (puesto) db.empleados[index].puesto = puesto;
@@ -78,6 +99,23 @@ exports.ActualizarEmpleado = (req, res) => {
             
             db.empleados[index].departamentoId = parseInt(departamentoId);
         }
+        
+        if (empresaId && empresaId !== oldEmpresaId) {
+            if (oldEmpresaId && db.empresas) {
+                const viejaEmpresa = db.empresas.find(e => e.id === oldEmpresaId);
+                if (viejaEmpresa && viejaEmpresa.empleados) {
+                    viejaEmpresa.empleados = viejaEmpresa.empleados.filter(eId => eId !== empleadoId);
+                }
+            }
+            if (empresaId && db.empresas) {
+                const nuevaEmpresa = db.empresas.find(e => e.id === empresaId);
+                if (nuevaEmpresa) {
+                    if (!nuevaEmpresa.empleados) nuevaEmpresa.empleados = [];
+                    nuevaEmpresa.empleados.push(empleadoId);
+                }
+            }
+            db.empleados[index].empresaId = empresaId;
+        }
 
         guardarDatos(db);
         res.json({ message: "Empleado actualizado con éxito", empleado: db.empleados[index] });
@@ -97,13 +135,17 @@ exports.EliminarEmpleado = (req, res) => {
             return res.status(404).json({ message: "Empleado no encontrado" });
         }
         
-        const deptoId = db.empleados[index].departamentoId;
+        const empleado = db.empleados[index];
+        const deptoId = empleado.departamentoId;
+        
+        if (empleado.empresaId && db.empresas) {
+            const empresa = db.empresas.find(e => e.id === empleado.empresaId);
+            if (empresa && empresa.empleados) {
+                empresa.empleados = empresa.empleados.filter(eId => eId !== empleadoId);
+            }
+        }
         
         db.empleados.splice(index, 1);
-        
-        if (db.empresa && db.empresa.empleados) {
-            db.empresa.empleados = db.empresa.empleados.filter(eId => eId !== empleadoId);
-        }
         
         const indexDepto = db.departamentos.findIndex(d => d.id === deptoId);
         if (indexDepto !== -1 && db.departamentos[indexDepto].empleados) {

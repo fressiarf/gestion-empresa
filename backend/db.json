@@ -1,51 +1,73 @@
 {
-  "empresa": {
-    "nombre": "Dev Costa Rica",
-    "direccion": "Heredia, Costa Rica",
-    "telefono": "2222-3344",
-    "departamentos": [
-      2,
-      3,
-      4
-    ],
-    "empleados": [
-      1,
-      2
-    ]
-  },
+  "empresas": [
+    {
+      "id": 1,
+      "nombre": "Tech SA",
+      "direccion": "San José, Costa Rica",
+      "telefono": "8888-9988",
+      "departamentos": [
+        2,
+        3,
+        4
+      ],
+      "empleados": [
+        3
+      ]
+    },
+    {
+      "id": 2,
+      "nombre": "DevSolutions",
+      "direccion": "Puntarenas, Costa Rica",
+      "telefono": "8888-1010",
+      "departamentos": [],
+      "empleados": []
+    }
+  ],
   "departamentos": [
     {
       "id": 2,
       "nombre": "Ventas",
-      "empleados": [
-        1
-      ]
+      "empleados": [],
+      "empresaId": 1
     },
     {
       "id": 3,
       "nombre": "Marketing",
-      "empleados": []
+      "empleados": [],
+      "empresaId": 2
     },
     {
       "id": 4,
       "nombre": "Tecnología",
       "empleados": [
-        2
-      ]
+        2,
+        1,
+        3
+      ],
+      "empresaId": 1
     }
   ],
   "empleados": [
     {
       "id": 1,
-      "nombre": "Juan Perez",
-      "puesto": "Contador",
-      "departamentoId": 2
+      "nombre": "Esteban Vargas",
+      "puesto": "Desarrollador Backend",
+      "departamentoId": 4,
+      "empresaId": 1
     },
     {
       "id": 2,
       "nombre": "Esteban Rojas",
       "puesto": "Desarrollador Backend",
-      "departamentoId": 4
+      "departamentoId": 4,
+      "empresaId": 1
+    },
+    {
+      "id": 3,
+      "nombre": "Samir",
+      "puesto": "Desarrollador Frontend",
+      "departamentoId": 4,
+      "empresaId": 1
     }
   ]
 }

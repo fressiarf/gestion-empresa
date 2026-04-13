@@ -28,19 +28,25 @@ exports.obtenerDepartamentoPorId = (req, res) => {
 
 exports.agregarDepartamento = (req, res) => {
     try {
-        const { nombre } = req.body;
+        const { nombre, empresaId } = req.body;
         const db = leerDatos();
         const nuevoDepartamento = new Departamento(nombre);
         const nuevoId = db.departamentos.length > 0 ? db.departamentos[db.departamentos.length - 1].id + 1 : 1;
         const deptoParaGuardar = {
             id: nuevoId,
             nombre: nuevoDepartamento.nombre,
-            empleados: nuevoDepartamento.empleados
+            empleados: nuevoDepartamento.empleados,
+            empresaId: empresaId || null
         };
         db.departamentos.push(deptoParaGuardar);
         
-        if (!db.empresa.departamentos) db.empresa.departamentos = [];
-        db.empresa.departamentos.push(nuevoId);
+        if (empresaId && db.empresas) {
+            const empresa = db.empresas.find(e => e.id === empresaId);
+            if (empresa) {
+                if (!empresa.departamentos) empresa.departamentos = [];
+                empresa.departamentos.push(nuevoId);
+            }
+        }
 
         guardarDatos(db);
         res.status(201).json({ message: "Departamento agregado con éxito", departamento: deptoParaGuardar });
@@ -72,15 +78,20 @@ exports.EliminarDepartamento = (req, res) => {
     try {
         const { id } = req.params;
         const db = leerDatos();
+        const departamento = db.departamentos.find(d => d.id === parseInt(id));
         const index = db.departamentos.findIndex(d => d.id === parseInt(id));
         if (index === -1) {
             return res.status(404).json({ message: "Departamento no encontrado" });
         }
-        db.departamentos.splice(index, 1);
-
-        if (db.empresa && db.empresa.departamentos) {
-            db.empresa.departamentos = db.empresa.departamentos.filter(dId => dId !== parseInt(id));
+        
+        if (departamento.empresaId && db.empresas) {
+            const empresa = db.empresas.find(e => e.id === departamento.empresaId);
+            if (empresa && empresa.departamentos) {
+                empresa.departamentos = empresa.departamentos.filter(dId => dId !== parseInt(id));
+            }
         }
+        
+        db.departamentos.splice(index, 1);
 
         guardarDatos(db);
         res.json({ message: "Departamento eliminado con éxito" });
