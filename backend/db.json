@@ -1,19 +1,37 @@
 {
   "empresa": {
-    "nombre": "Mi Nueva Empresa Tech SA",
-    "direccion": "San José, Costa Rica",
-    "telefono": "8888-9999"
+    "nombre": "Dev Costa Rica",
+    "direccion": "Heredia, Costa Rica",
+    "telefono": "2222-3344",
+    "departamentos": [
+      2,
+      3,
+      4
+    ],
+    "empleados": [
+      1,
+      2
+    ]
   },
   "departamentos": [
     {
       "id": 2,
       "nombre": "Ventas",
-      "empleados": []
+      "empleados": [
+        1
+      ]
     },
     {
       "id": 3,
       "nombre": "Marketing",
       "empleados": []
+    },
+    {
+      "id": 4,
+      "nombre": "Tecnología",
+      "empleados": [
+        2
+      ]
     }
   ],
   "empleados": [
@@ -21,7 +39,13 @@
       "id": 1,
       "nombre": "Juan Perez",
       "puesto": "Contador",
-      "departamentoId": 1
+      "departamentoId": 2
+    },
+    {
+      "id": 2,
+      "nombre": "Esteban Rojas",
+      "puesto": "Desarrollador Backend",
+      "departamentoId": 4
     }
   ]
 }

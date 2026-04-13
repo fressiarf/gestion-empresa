@@ -11,9 +11,24 @@ exports.obtenerDepartamentos = (req, res) => {
     }
 };
 
+exports.obtenerDepartamentoPorId = (req, res) => {
+    try {
+        const { id } = req.params;
+        const db = leerDatos();
+        const departamento = db.departamentos.find(d => d.id === parseInt(id));
+        if (!departamento) {
+            return res.status(404).json({ message: "Departamento no encontrado" });
+        }
+        res.json(departamento);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error al obtener el departamento" });
+    }
+};
+
 exports.agregarDepartamento = (req, res) => {
     try {
-        const { nombre } = req.body; //esto se realizo para que el frontend pueda enviar el nombre del departamento
+        const { nombre } = req.body;
         const db = leerDatos();
         const nuevoDepartamento = new Departamento(nombre);
         const nuevoId = db.departamentos.length > 0 ? db.departamentos[db.departamentos.length - 1].id + 1 : 1;
@@ -23,6 +38,10 @@ exports.agregarDepartamento = (req, res) => {
             empleados: nuevoDepartamento.empleados
         };
         db.departamentos.push(deptoParaGuardar);
+        
+        if (!db.empresa.departamentos) db.empresa.departamentos = [];
+        db.empresa.departamentos.push(nuevoId);
+
         guardarDatos(db);
         res.status(201).json({ message: "Departamento agregado con éxito", departamento: deptoParaGuardar });
     } catch (error) {
@@ -58,6 +77,11 @@ exports.EliminarDepartamento = (req, res) => {
             return res.status(404).json({ message: "Departamento no encontrado" });
         }
         db.departamentos.splice(index, 1);
+
+        if (db.empresa && db.empresa.departamentos) {
+            db.empresa.departamentos = db.empresa.departamentos.filter(dId => dId !== parseInt(id));
+        }
+
         guardarDatos(db);
         res.json({ message: "Departamento eliminado con éxito" });
     } catch (error) {

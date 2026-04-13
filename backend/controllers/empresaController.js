@@ -14,9 +14,9 @@ exports.agregarEmpresa = (req, res) => {
     try {
         const { nombre, direccion, telefono } = req.body;
         const db = leerDatos();
-        db.empresa.nombre = nombre;
-        db.empresa.direccion = direccion;
-        db.empresa.telefono = telefono;
+        const Empresa = require("../models/empresa");
+        const nuevaEmpresa = new Empresa(nombre, direccion, telefono);
+        db.empresa = nuevaEmpresa;
         guardarDatos(db);
         res.status(201).json({ message: "Empresa agregada con éxito", empresa: db.empresa });
     } catch (err) {
@@ -32,6 +32,8 @@ exports.actualizarEmpresa = (req, res) => {
         db.empresa.nombre = nombre;
         db.empresa.direccion = direccion;
         db.empresa.telefono = telefono;
+        if (!db.empresa.departamentos) db.empresa.departamentos = [];
+        if (!db.empresa.empleados) db.empresa.empleados = [];
         guardarDatos(db);
         res.json({ message: "Empresa actualizada con éxito" });
     } catch (err) {

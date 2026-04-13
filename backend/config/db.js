@@ -1,5 +1,3 @@
-//se esta utilizando dbPath.json para simular base de datos
-
 const fs = require('fs');
 const path = require('path');
 

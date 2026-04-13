@@ -70,7 +70,7 @@ node app.js
 ## Uso
 
 1. Ejecute el servidor mediante la consola de comandos.
-2. Utilice un cliente HTTP diseñado para desarrollo de APIs como Postman o Insomnia.
+2. Utilice un cliente HTTP diseñado para desarrollo de APIs como Postman.
 3. Configure la solicitud hacia los endpoints pertinentes para interactuar con el sistema (`GET`, `POST`, `PUT`, `DELETE` en `/api/empresa`, `/api/departamentos`, `/api/empleados`).
 4. Para operaciones de inserción y modificación de datos, envíe la carga útil (payload) dentro del cuerpo de la solicitud configurado en formato JSON (`raw`).
 
@@ -96,33 +96,22 @@ npm install       # Instala o restaura las dependencias necesarias
 
 ---
 
-## Contribución
-
-Las contribuciones son bienvenidas. Para colaborar:
-
-1. Haz un fork del proyecto
-2. Crea una nueva rama (git checkout -b feature/nueva-funcionalidad)
-3. Realiza tus cambios
-4. Haz commit (git commit -m "Agrega nueva funcionalidad")
-5. Haz push (git push origin feature/nueva-funcionalidad)
-6. Abre un Pull Request
-
----
-
 ## Licencia
 
-Puedes usarlo, modificarlo y distribuirlo libremente.
+**Uso Académico Exclusivo.**
+Este proyecto fue creado íntegramente con fines educativos y de evaluación académica. Queda estrictamente prohibida su copia, distribución, modificación o uso con fines comerciales y/o públicos sin la autorización expresa del autor.
 
 ---
 
 ## Autor
 
-Desarrollado para la materia y gestión del desarrollo backend empresarial.
+Desarrollado de manera exclusiva como un proyecto académico para la materia **Backend**.
 
 ---
 
 ## Notas adicionales
-* Este proyecto utiliza un manejador de archivos personalizado mediante Node.js, por lo que no requiere conexión a un gestor de base de datos SQL / NoSQL (MySQL, MongoDB, etc.).
+* Actualmente, el proyecto utiliza de forma **temporal** un manejador de archivos que guarda la información en un archivo plano (`db.json`) mediante Node.js.
+* Se tiene planeada la **migración a un gestor de base de datos real** (SQL / NoSQL como MySQL o MongoDB) más adelante. La arquitectura del sistema ya está preparada para facilitar esta transición.
 * El ambiente está optimizado para facilitar el aprendizaje arquitectónico empresarial y el prototipado backend avanzado.
 
 ---
